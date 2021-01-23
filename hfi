@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# If you want to average across several runs, start here:
+# https://askubuntu.com/questions/915132/measure-performance-of-a-fast-bash-script
+
+# Enable verbose logging of the bash script
+#PS4='+($(basename ${BASH_SOURCE}):${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): } '
+#set -x
+
+FileToTest="${1}"
+Format="
+Time (h:m.s):           %E
+CPU usage:              %P
+Memory usage:           %K kilobytes
+Unshared stack space:   %p kilobytes
+unshared data area:     %D kilobytes
+Max resident set size:  %M kilobytes
+"
+
+# 'command' forces bash to use /usr/bin/time instead of the built-in time
+command time --format "${Format}" "${FileToTest}" 1>/dev/null
