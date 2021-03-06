@@ -9,7 +9,7 @@
 
 FileToTest="${1}"
 Format="
-Time (h:m.s):           %E
+Time (h:m:s):           %E
 CPU usage:              %P
 Memory usage:           %K kilobytes
 Unshared stack space:   %p kilobytes
