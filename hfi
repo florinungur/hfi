@@ -1,11 +1,52 @@
 #!/usr/bin/env bash
 
-# If you want to average across several runs, start here:
-# https://askubuntu.com/questions/915132/measure-performance-of-a-fast-bash-script
+set -euo pipefail
 
-# Enable verbose logging of the bash script
-#PS4='+($(basename ${BASH_SOURCE}):${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): } '
-#set -x
+__SCRIPT_NAME=$(basename "${BASH_SOURCE[0]}")
+
+__show_help() {
+    cat <<HELP_USAGE
+
+NAME
+    ${__SCRIPT_NAME} - simple time(1) wrapper
+
+SYNOPSIS
+    ${__SCRIPT_NAME} [-h] SCRIPT
+
+DESCRIPTION
+    ${__SCRIPT_NAME} (short for "how fast is") is a wrapper over the time(1) command that shows the time, CPU, and
+    memory use of a Bash script in a pretty format.
+
+    This command may not work on your macOS version. Check your time(1) command.
+
+ARGUMENTS
+    SCRIPT
+            Path to a Bash script.
+
+OPTIONS
+    -h      Show this message.
+
+EXAMPLE
+    ${__SCRIPT_NAME} test_script.sh
+            Assesses a Bash script called test_script.
+
+HELP_USAGE
+}
+
+while getopts ':hp:' opt; do
+    case "$opt" in
+    h)
+        __show_help
+        exit 0
+        ;;
+    *)
+        printf "ERROR: Unknown option [%s]\n" "${*}"
+        exit 1
+        ;;
+    esac
+done
+
+shift "$((OPTIND - 1))"
 
 FileToTest="${1}"
 Format="
@@ -17,5 +58,4 @@ unshared data area:     %D kilobytes
 Max resident set size:  %M kilobytes
 "
 
-# 'command' forces bash to use /usr/bin/time instead of the built-in time
 command time --format "${Format}" "${FileToTest}" 1>/dev/null
