@@ -27,3 +27,5 @@ EXAMPLE
 
 Not every project needs to be big, complex, with the aim of attaining perfection. This is a working piece of software. 
 Useful? May be to some. Fun to make? Yes it was :)
+
+⚠️ This command may not work on your macOS version. Check your time(1) command.
